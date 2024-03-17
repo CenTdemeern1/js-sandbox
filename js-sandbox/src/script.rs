@@ -5,6 +5,7 @@ use std::path::Path;
 use std::rc::Rc;
 use std::{thread, time::Duration};
 
+use deno_core::v8::CreateParams;
 use deno_core::{op, Extension, FastString, JsBuffer, JsRuntime, Op, OpState};
 use serde::de::DeserializeOwned;
 
@@ -174,6 +175,7 @@ impl Script {
 		};
 
 		let mut runtime = JsRuntime::new(deno_core::RuntimeOptions {
+			create_params: Some(CreateParams::default().heap_limits(0, 50331648)),
 			module_loader: Some(Rc::new(deno_core::FsModuleLoader)),
 			extensions: vec![ext],
 			..Default::default()
